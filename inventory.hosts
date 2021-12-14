@@ -1,0 +1,7 @@
+#GROUP NAME FOR MY WEB SERVER
+[webserver]
+54.74.100.12        # IP ADDRESS OF MY EC2 SERVER
+
+[webserver:vars]
+ansible_user = "ec2-user"
+ansible_ssh_private_key_file = "~/.ssh/ta-lab-ansible-key"

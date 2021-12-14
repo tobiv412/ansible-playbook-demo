@@ -1,0 +1,14 @@
+---
+- hosts: webserver
+  become: yes
+  tasks:
+    - name: This is my first task
+      file:
+        path: "{{ my_demo_folder_path }}"
+        state: directory
+        owner: ec2-user
+
+    - name: Creating a new file
+      file:
+        path: "{{ my_demo_folder_path }}/new_file.txt"
+        state: touch

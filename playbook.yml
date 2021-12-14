@@ -2,21 +2,63 @@
 - hosts: webserver
   become: yes
   tasks:
-    - name: This is my first task
+    - name: Creating a new folder
       file:
-        path: "{{ my_demo_folder_path }}"
+        path: "/etc/nginx/sites-available/default/"
         state: directory
-        owner: ec2-user
 
-    - name: Creating a new file
+    - name: Creating a new folder
       file:
-        path: "{{ my_demo_folder_path }}/new_file.txt"
-        state: touch
+        path: "/etc/nginx/sites-enabled/"
+        state: directory
 
-      
-     
+
     - name: Enable amazon-linux-extras packages
       shell: "amazon-linux-extras enable nginx1"
     
     
+
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: latest
     
+   
+    - name: Copy website files to the server's document root
+      copy:
+        src: "{{ app_root }}"
+        dest: "{{ document_root }}"
+        mode: preserve
+    
+    
+    - name: Apply Nginx template
+      template:
+        src: files/nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+      notify: Restart Nginx
+
+    - name: Enable new site
+      file:
+        src: /etc/nginx/sites-available/default
+        dest: /etc/nginx/sites-enabled/default
+        state: link
+      notify: Restart Nginx
+
+    - name: Edit nginx.conf to point to right directory
+      lineinfile:
+        path: /etc/nginx/nginx.conf
+        regexp: '^(.*)include \/etc\/nginx\/conf.d\/\*;(.*)$'
+        line: 'include /etc/nginx/conf.d/*;'
+        backrefs: yes      
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+    
+    
+
+
+  
