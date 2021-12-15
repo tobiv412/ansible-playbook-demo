@@ -1,0 +1,31 @@
+- name: Run playbook
+  uses: dawidd6/action-ansible-playbook@v2
+  with:
+  steps:
+      - name: AWS authentication
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+    # Required, playbook filepath
+    playbook: playbook.yml
+    # Optional, directory where playbooks live
+    directory: ./
+    
+    inventory: inventory.hosts
+      
+   
+    known_hosts: .known_hosts
+    
+   
+    # Optional, galaxy requirements filepath
+    requirements: playbook.yml
+    # Optional, additional flags to pass to ansible-playbook
+    options: |
+      --inventory .hosts
+      --limit group1
+      
+      --verbose
+
+      
