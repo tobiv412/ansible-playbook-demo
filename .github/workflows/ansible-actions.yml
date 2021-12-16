@@ -18,10 +18,7 @@
    
     known_hosts: .known_hosts
     
-   
-    # Optional, galaxy requirements filepath
-    requirements: playbook.yml
-    # Optional, additional flags to pass to ansible-playbook
+     # Optional, additional flags to pass to ansible-playbook
     options: |
        --verbose
 
